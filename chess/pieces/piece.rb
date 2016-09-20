@@ -1,4 +1,5 @@
 class Piece
+  attr_reader :color
   def initialize(color, board, position)
     @color = color
     @board = board
@@ -21,5 +22,22 @@ class Piece
 
   def to_s
     self.symbol
+  end
+
+  def self.in_bounds?(position)
+    x, y = position
+    (0..7).to_a.include?(x) && (0..7).to_a.include?(y)
+  end
+
+  def occupied_position?(position)
+    @board[position].is_a?(Piece)
+  end
+
+  def same_color?(position)
+    @board[position].color == @color
+  end
+
+  def is_enemy?(position)
+    @board[position].color != @color
   end
 end

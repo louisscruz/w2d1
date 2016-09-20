@@ -9,4 +9,8 @@ class King < Piece
     @symbol = color == :white ? "♔" : "♚"
     super
   end
+
+  def move_directions
+    Stepable::CIRCULAR
+  end
 end

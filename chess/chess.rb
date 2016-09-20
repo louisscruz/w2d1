@@ -17,5 +17,7 @@ end
 
 if __FILE__ == $PROGRAM_NAME
   game = Chess.new
-  game.play
+  board = Board.new
+
+  p board[[6,0]].moves
 end

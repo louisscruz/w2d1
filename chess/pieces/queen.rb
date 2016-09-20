@@ -10,4 +10,8 @@ class Queen < Piece
     @symbol = color == :white ? "♕" : "♛"
     super
   end
+
+  def move_directions
+    Slideable::DIAGONAL + Slideable::LATERAL
+  end
 end

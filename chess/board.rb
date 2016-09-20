@@ -37,7 +37,7 @@ class Board
   private
   def set_pieces
     @grid[1].map! {|tile| Pawn.new(:black, self, [0, 0])}
-    @grid[6].map! {|tile| Pawn.new(:white, self, [0, 0])}
+    @grid[6].map! {|tile| Pawn.new(:white, self, [6, 0])}
     self[[0, 4]] = King.new(:black, self, [0, 4])
     self[[7, 3]] = King.new(:white, self, [7, 3])
     self[[0, 3]] = Queen.new(:black, self, [0, 3])

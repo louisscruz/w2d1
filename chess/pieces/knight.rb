@@ -10,4 +10,8 @@ class Knight < Piece
     @symbol = color == :white ? "♘" : "♞"
     super
   end
+
+  def move_directions
+    Stepable::L_MOVE
+  end
 end

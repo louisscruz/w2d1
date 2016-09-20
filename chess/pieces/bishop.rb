@@ -10,4 +10,7 @@ class Bishop < Piece
     super
   end
 
+  def move_directions
+    Slideable::DIAGONAL
+  end
 end

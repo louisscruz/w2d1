@@ -9,4 +9,8 @@ class Rook < Piece
     @symbol = color == :white ? "♖" : "♜"
     super
   end
+
+  def move_directions
+    Slideable::LATERAL
+  end
 end

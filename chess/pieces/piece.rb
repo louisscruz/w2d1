@@ -36,8 +36,4 @@ class Piece
   def same_color?(position)
     @board[position].color == @color
   end
-
-  def is_enemy?(position)
-    @board[position].color != @color
-  end
 end

@@ -34,10 +34,17 @@ class Board
     (0..7).to_a.include?(pos.first) && (0..7).to_a.include?(pos.last)
   end
 
+  def is_enemy?(position, color)
+    piece = self[position]
+    p piece
+    !piece.is_a?(NullPiece) && piece.color != color
+  end
+
   private
   def set_pieces
     @grid[1].map! {|tile| Pawn.new(:black, self, [0, 0])}
     @grid[6].map! {|tile| Pawn.new(:white, self, [6, 0])}
+    self[[5, 1]] = Pawn.new(:black, self, [5, 1])
     self[[0, 4]] = King.new(:black, self, [0, 4])
     self[[7, 3]] = King.new(:white, self, [7, 3])
     self[[0, 3]] = Queen.new(:black, self, [0, 3])

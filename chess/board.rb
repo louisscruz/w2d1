@@ -15,9 +15,10 @@ class Board
 
   def move(start, end_pos)
     raise "Empty cell" if self[start].is_a?(NullPiece)
+    #raise "Invalid move" if self[start].move_into_check?(end_pos)
     self[start], self[end_pos] = self[end_pos], self[start]
-    raise "Invalid move" unless self[start].update_position(end_pos)
-    self[end_pos].update_position(start)
+    self[end_pos].update_position(end_pos)
+    self[start].update_position(start) unless self[start].is_a?(NullPiece)
   end
 
   def [](pos)
@@ -36,15 +37,38 @@ class Board
 
   def is_enemy?(position, color)
     piece = self[position]
-    p piece
     !piece.is_a?(NullPiece) && piece.color != color
+  end
+
+  def in_check?(color)
+    king_position = find_king_position(color)
+    enemy_pieces(color).each do |enemy|
+      # p "#{enemy.class} has moves: #{enemy.moves}"
+      return true if enemy.moves.include?(king_position)
+    end
+    false
+  end
+
+  def checkmate?(color)
+    #still in construction
+    in_check?(color) && self[find_king_position(color)].valid_moves.length == 0
+  end
+
+  def dup
+    Marshal.load(Marshal.dump(self))
+    # board = Board.new
+    # @grid.each_with_index do |row, i|
+    #   row.each_with_index do |tile, j|
+    #     board[[i, j]] = tile
+    #   end
+    # end
+    # board
   end
 
   private
   def set_pieces
-    @grid[1].map! {|tile| Pawn.new(:black, self, [0, 0])}
-    @grid[6].map! {|tile| Pawn.new(:white, self, [6, 0])}
-    self[[5, 1]] = Pawn.new(:black, self, [5, 1])
+    (0..7).each { |i| @grid[1][i] = Pawn.new(:black, self, [1, i]) }
+    (0..7).each { |i| @grid[6][i] = Pawn.new(:white, self, [6, i]) }
     self[[0, 4]] = King.new(:black, self, [0, 4])
     self[[7, 3]] = King.new(:white, self, [7, 3])
     self[[0, 3]] = Queen.new(:black, self, [0, 3])
@@ -64,5 +88,29 @@ class Board
     self[[0, 6]] = Knight.new(:black, self, [0, 6])
     self[[7, 1]] = Knight.new(:white, self, [7, 1])
     self[[7, 6]] = Knight.new(:white, self, [7, 6])
+  end
+
+  def enemy_pieces(color)
+    enemies = []
+    @grid.each do |row|
+      row.each do |tile|
+        if !tile.is_a?(NullPiece) && tile.color != color
+          enemies << tile
+        end
+      end
+    end
+    enemies
+  end
+
+  def find_king_position(color)
+    king_position = []
+    @grid.each_with_index do |row, i|
+      row.each_with_index do |tile, j|
+        if tile.is_a?(King) && tile.color == color
+          king_position = [i, j]
+        end
+      end
+    end
+    king_position
   end
 end

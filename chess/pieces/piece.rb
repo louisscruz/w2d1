@@ -10,16 +10,6 @@ class Piece
     @position = pos
   end
 
-  def moves
-    if self.slideable?
-      [[0,0],[1,1],[2,2]]
-    elsif self.stepable?
-      [[6,6],[5,5],[0,0]]
-    else
-      self.moves
-    end
-  end
-
   def to_s
     self.symbol
   end
@@ -34,6 +24,20 @@ class Piece
   end
 
   def same_color?(position)
-    @board[position].color == @color
+    !@board[position].is_a?(NullPiece) && @board[position].color == @color
+  end
+
+  def valid_moves
+    valids =[]
+    moves.each do |move|
+      valids << move unless move_into_check?(move)
+    end
+    valids
+  end
+
+  def move_into_check?(position)
+    board_copy = @board.dup
+    board_copy.move(@position, position)
+    board_copy.in_check?(@color)
   end
 end

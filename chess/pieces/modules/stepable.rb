@@ -23,8 +23,10 @@ module Stepable
       new_y = @position.last + direction.last
       new_position = [new_x, new_y]
       next unless self.class.in_bounds?(new_position)
-      moves << new_position
+      unless same_color?(new_position)
+        moves << new_position
+      end
     end
-    p moves
+    moves
   end
 end

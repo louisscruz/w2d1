@@ -37,7 +37,7 @@ module Slideable
         new_position = [new_x, new_y]
       end
     end
-    p moves
+    moves
   end
 
 end

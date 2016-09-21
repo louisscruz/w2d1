@@ -13,7 +13,9 @@ class Pawn < Piece
 
     direction = @color == :white ? -1 : 1
     new_move = [@position.first + direction, @position.last]
-    moves << new_move
+    if @board[new_move].is_a?(NullPiece)
+      moves << new_move
+    end
     if is_in_first_row?
       two_step = [@position.first + (2 * direction), @position.last]
       moves << two_step
@@ -22,7 +24,11 @@ class Pawn < Piece
     diagonal_one = [@position.first + direction, @position.last - 1]
     diagonal_two = [@position.first + direction, @position.last + 1]
 
-    [diagonal_one, diagonal_two].each do |diagonal|
+    diagonals = [diagonal_one, diagonal_two].select do |diagonal|
+      (0..7).to_a.include?(diagonal.first) && (0..7).to_a.include?(diagonal.last)
+    end
+
+    diagonals.each do |diagonal|
       moves << diagonal if @board.is_enemy?(diagonal, @color)
     end
 
@@ -33,6 +39,4 @@ class Pawn < Piece
   def is_in_first_row?
     @position.first == 1 || @position.first == 6
   end
-
-
 end

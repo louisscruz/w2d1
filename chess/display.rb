@@ -14,9 +14,9 @@ class Display
     @board.grid.each_with_index do |row, i|
       row.each_with_index do |piece, j|
         tile = " " + piece.to_s.black + " "
-        if [i, j] == @cursor.cursor_pos
+        if @cursor.selected == [i, j] || (!@cursor.selected && [i, j] == @cursor.cursor_pos)
           board += tile.on_green
-        elsif @cursor.selected && piece.moves.include?([i, j])
+        elsif @cursor.selected && [i, j] == @cursor.cursor_pos
           board += tile.on_yellow
         elsif (2 + i + j) % 2 == 0
           board += tile.on_light_white
@@ -29,10 +29,7 @@ class Display
     print board
   end
 
-  def loop
-    while true
-      render
-      @cursor.get_input
-    end
+  def get_input
+    @cursor.get_input
   end
 end

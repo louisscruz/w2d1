@@ -80,7 +80,7 @@ class Cursor
     case key
     when :return, :space
       #@cursor_pos
-      @selected = @cursor_pos
+      handle_make_move
     when :left, :right, :up, :down
       update_pos(MOVES[key])
     when :ctrl_c
@@ -95,6 +95,24 @@ class Cursor
     end
     if @board.in_bounds?(new_pos)
       @cursor_pos = new_pos
+    end
+  end
+
+  def handle_make_move
+    if @selected.nil?
+      @selected = @cursor_pos
+    else
+      if @board[selected].move_into_check?(@cursor_pos)
+        p "Wrong move"
+      elsif !@board[@selected].valid_moves.include?(@cursor_pos)
+        @selected = nil
+        raise StandardError
+
+        # p "Cannot move that piece there!"
+      else
+        @board.move(@selected, @cursor_pos)
+      end
+      @selected = nil
     end
   end
 end
